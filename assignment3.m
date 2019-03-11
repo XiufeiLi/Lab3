@@ -6,10 +6,10 @@ ylabel("Number")
 title("\tau")
 %% Parameters
 close all;
-psi = 1;
-bp = 5;
+psi = 3;
+bp = 4;
 d = bp + 1;
-rho = 0.1;
+rho = 0.01;
 %% Hybrid MCMC
 
 N = 20000;
@@ -63,7 +63,7 @@ for i = 1:M-1
 end
 
 tau = ceil(mean(t(:,burnIn:M),2));
-%% figures for report
+%% figures for report. (b)(c)
 % lambda
 figure
 length = size(lambda,1);
@@ -74,7 +74,7 @@ for i = 1:length
     title(str) 
 end
 xlabel("\lambda")
-savename = sprintf('lambda_Breakpoints%d.png',bp);
+savename = sprintf('lambda_Breakpoints%drho%.3fpsi3.png',bp,rho);
 saveas(gcf,char(savename))
 % theta
 figure
@@ -82,7 +82,7 @@ histfit(theta(burnIn:end),50,'gamma');
 xlabel("\theta")
 ylabel("Numbers")
 title("\theta Distribution")
-savename = sprintf("theta_Breakpoints%d.png",bp);
+savename = sprintf("theta_Breakpoints%drho%.3fpsi3.png",bp,rho);
 saveas(gcf,char(savename))
 % t
 figure
@@ -95,7 +95,7 @@ for i = 2:length-1
     title(str)
 end
 xlabel("Number of iterations (5000 burn in points)")
-savename = sprintf("t_Breakpoints%d.png",bp);
+savename = sprintf("t_Breakpoints%drho%.3fpsi3.png",bp,rho);
 saveas(gcf,char(savename))
 % t vary
 figure
@@ -110,9 +110,21 @@ for i = 2:length-1
     title(str)
 end
 xlabel("Number of iterations (5000 burn in points)")
-savename = sprintf("t_Breakpoints%d.png",bp);
+savename = sprintf("t_Breakpoints%drho%.3fpsi3.png",bp,rho);
 saveas(gcf,char(savename))
-%
+% t distribution
+figure
+for i = 2:size(t,1)-1      
+    hold on
+    histogram(t(i,burnIn:end),40)
+    str = sprintf('t distribution with %d breakpoints',bp);
+    title(str)
+end
+xlabel("Year")
+ylabel("Number")
+savename = sprintf("tdistribution_Breakpoints%drho%.3fpsi3.png",bp,rho);
+saveas(gcf,char(savename))
+% t in whole
 figure
 hold on
 h = histogram(T,50);
@@ -123,5 +135,5 @@ end
 xlabel("Year")
 ylabel("Numbers")
 title('t result')
-savename = sprintf("tshow_Breakpoints%d.png",bp);
+savename = sprintf("tshow_Breakpoints%drho%.3fpsi3.png",bp,rho);
 saveas(gcf,char(savename))
